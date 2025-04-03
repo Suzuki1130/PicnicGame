@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picnic Party Games</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #a8e6cf;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ff8b94;
+            font-size: 2.5rem;
+        }
+        .game-section {
+            margin: 30px 0;
+            padding: 15px;
+            background-color: #ffd3b6;
+            border-radius: 10px;
+        }
+        button {
+            background-color: #ff8b94;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 10px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            background-color: #ff6b74;
+            transform: scale(1.05);
+        }
+        .result {
+            font-size: 1.3rem;
+            margin: 20px;
+            min-height: 60px;
+            font-weight: bold;
+        }
+        .dare-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 80%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 1.2rem;
+            display: none;
+        }
+        .word-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px;
+            color: #ff6b74;
+        }
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px;
+        }
+        .scored-item {
+            font-size: 1.2rem;
+            margin: 5px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .credits {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Picnic Party Games 🎉</h1>
+        
+        <!-- Game 1: Who's Next? -->
+        <div class="game-section">
+            <h2>🎯 Who's Next?</h2>
+            <p>Let fate decide who goes next in any game or challenge!</p>
+            <button onclick="chooseRandomFriend()">Spin the Wheel!</button>
+            <div id="randomFriend" class="result"></div>
+        </div>
+
+        <!-- Game 2: Truth or Dare -->
+        <div class="game-section">
+            <h2>😈 Picnic Dares</h2>
+            <p>Outdoor fun challenges perfect for a picnic!</p>
+            <button onclick="generateDare()">Get a Dare</button>
+            <div id="dareCard" class="dare-card"></div>
+        </div>
+
+        <!-- Game 3: Word Scramble -->
+        <div class="game-section">
+            <h2>🔤 Picnic Word Scramble</h2>
+            <p>Can you unscramble these picnic-themed words?</p>
+            <button onclick="newScramble()">New Word</button>
+            <div id="wordDisplay" class="word-display"></div>
+            <button onclick="revealWord()">Give Up / Reveal</button>
+            <div id="wordReveal" class="result"></div>
+        </div>
+
+        <!-- Game 4: 10-Second Challenge -->
+        <div class="game-section">
+            <h2>⏱️ 10-Second Challenge</h2>
+            <p>Name as many items as you can in the given category before time runs out!</p>
+            <button onclick="startChallenge()">Start Challenge</button>
+            <div id="challengeCategory" class="result"></div>
+            <div id="timer" class="timer"></div>
+            <div id="scoreArea" style="display:none;">
+                <h3>Score Items:</h3>
+                <div id="scoreList"></div>
+                <button onclick="addScoreItem()">Add Item</button>
+                <button onclick="finishScoring()">Finish</button>
+            </div>
+        </div>
+        
+        <!-- Credits -->
+        <div class="credits">
+            <p>Created by Harry</p>
+            <p>On April 3</p>
+            <p>Time started and ended: 10:45 - 6 pm</p>
+        </div>
+    </div>
+
+    <script>
+        // Game 1: Who's Next with your friends
+        const friendsList = ["Harry", "Sakuya", "Erich", "Abby", "Lyka", "Hanna", "Akira"];
+        
+        function chooseRandomFriend() {
+            let spinning = true;
+            let counter = 0;
+            const spinInterval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * friendsList.length);
+                document.getElementById('randomFriend').innerHTML = `<span style="color: ${getRandomColor()}">${friendsList[randomIndex]}</span>`;
+                counter++;
+                if (counter > 10) {
+                    clearInterval(spinInterval);
+                }
+            }, 100);
+        }
+        
+        function getRandomColor() {
+            const colors = ['#ff8b94', '#ffaaa5', '#ffd3b6', '#dcedc1', '#a8e6cf'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Game 2: Truth or Dare
+        const dares = [
+            "Who do you hate the most?",
+            "Stand up and sing your favorite song chorus",
+            "Do 10 pushups",
+            "Tell a joke that will make everyone laugh",
+            "Trade an item of your picnic food with someone else",
+            "Do 10 jumping jacks right now",
+            "Take a selfie with the funniest face you can make",
+            "Give a 10 second speech about why picnics are the best",
+            "Put three pieces of food on a plate and eat them without using your hands",
+            "Balance something on your head for 10 seconds while walking",
+            "Do your best celebrity impression",
+            "Try to touch your nose with your tongue",
+            "Say the alphabet backwards",
+            "Let someone draw something on your arm with a marker",
+            "Pretend to be a news reporter and give a 30-second update about the picnic",
+            "Speak in an accent for the next 2 minutes",
+            "Tell everyone your most embarrassing picnic story",
+            "Who do you admire the most(excluding family members)?",
+            "Let the group choose a new hairstyle for you (temporary!)",
+            "Make up a short poem about someone in the group",
+            "Impersonate another friend in the group for 30 seconds",
+            "Wear your glasses upside down for 5 minutes",
+            "Try to keep a straight face while others try to make you laugh",
+            "Slap someone",
+            "Speak only in questions for 2 minutes",
+            "Try to balance a spoon on your nose for 10 seconds",
+            "Let someone pose you like a statue for a photo",
+            "Talk to a tree like it's your best friend",
+            "Try to do a handstand or cartwheel",
+            "Make up a new picnic-themed cocktail/mocktail and name it"
+        ];
+        
+        function generateDare() {
+            const dare = dares[Math.floor(Math.random() * dares.length)];
+            const dareCard = document.getElementById('dareCard');
+            dareCard.style.display = 'block';
+            dareCard.innerHTML = dare;
+        }
+
+        // Game 3: Word Scramble
+        const picnicWords = [
+            "sandwich", "blanket", "sunshine", "basket", "outdoors", 
+            "frisbee", "watermelon", "lemonade", "napkins", "umbrella", 
+            "sunscreen", "hamburger", "volleyball", "dessert", "cooler",
+            "barbeque", "picnic", "salad", "potato", "ketchup",
+            "mustard", "hotdog", "sausage", "chips", "dip",
+            "bread", "cheese", "butter", "jam", "forest",
+            "park", "beach", "garden", "friends", "family",
+            "backpack", "cupcake", "cookies", "chocolate", "icecream",
+            "grapes", "banana", "cherry", "strawberry", "games",
+            "relaxing", "summer", "spring", "hiking", "camping",
+            "bottled", "squirrel", "butterfly", "mosquito", "sunglasses"
+        ];
+        let currentWord = "";
+        
+        function scrambleWord(word) {
+            const arr = word.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join('');
+        }
+        
+        function newScramble() {
+            currentWord = picnicWords[Math.floor(Math.random() * picnicWords.length)];
+            let scrambled = scrambleWord(currentWord);
+            // Make sure the scrambled word is different from the original
+            while (scrambled === currentWord) {
+                scrambled = scrambleWord(currentWord);
+            }
+            document.getElementById('wordDisplay').innerText = scrambled;
+            document.getElementById('wordReveal').innerText = "";
+        }
+        
+        function revealWord() {
+            document.getElementById('wordReveal').innerText = `The word was: ${currentWord}`;
+        }
+
+        // Game 4: 10-Second Challenge
+        const categories = [
+            "Things you bring to a picnic",
+            "Outdoor games",
+            "Foods that are red",
+            "Animals you might see at a park",
+            "Summer activities",
+            "Types of sandwiches",
+            "Things that are round",
+            "Items you can find in nature",
+            "Desserts",
+            "Sports equipment",
+            "Picnic drinks",
+            "Things that fly",
+            "Green foods",
+            "Snack foods",
+            "Outdoor clothing items",
+            "Beach items",
+            "Things that make noise",
+            "Breakfast foods",
+            "Things that are sticky",
+            "Fast food items"
+        ];
+        let timerInterval;
+        
+        function startChallenge() {
+            const category = categories[Math.floor(Math.random() * categories.length)];
+            document.getElementById('challengeCategory').innerText = `Category: ${category}`;
+            
+            let timeLeft = 10;  // Changed from 30 to 10 seconds
+            document.getElementById('timer').innerText = timeLeft;
+            document.getElementById('timer').style.color = "black";
+            document.getElementById('scoreArea').style.display = "none";
+            document.getElementById('scoreList').innerHTML = "";
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                
+                if (timeLeft <= 3) {  // Changed from 10 to 3 seconds for warning color
+                    document.getElementById('timer').style.color = "red";
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').innerText = "TIME'S UP!";
+                    document.getElementById('scoreArea').style.display = "block";
+                }
+            }, 1000);
+        }
+        
+        function addScoreItem() {
+            const itemList = document.getElementById('scoreList');
+            const newItem = document.createElement('div');
+            newItem.className = 'scored-item';
+            newItem.innerHTML = `<input type="text" placeholder="Enter item"> <button onclick="this.parentNode.remove()">✕</button>`;
+            itemList.appendChild(newItem);
+        }
+        
+        function finishScoring() {
+            const items = document.querySelectorAll('.scored-item input');
+            const count = Array.from(items).filter(item => item.value.trim() !== '').length;
+            document.getElementById('timer').innerText = `Final Score: ${count} items!`;
+            document.getElementById('scoreArea').style.display = "none";
+        }
+    </script>
+</body>
+</html>
